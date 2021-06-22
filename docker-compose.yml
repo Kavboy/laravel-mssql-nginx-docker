@@ -1,0 +1,43 @@
+version: '3'
+services:
+  mssql:
+    container_name: mssql
+    build:
+      context: docker/mssql
+    ports:
+      - "1433:1433"
+    volumes:
+      - ./docker/mssql/data:/var/opt/mssql/data
+    networks:
+      - laravelNetwork
+
+  php:
+    container_name: php
+    build:
+      context: docker/php
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+    links:
+      - mssql
+    networks:
+      - laravelNetwork
+
+  nginx:
+    container_name: nginx
+    build:
+      context: docker/nginx
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./laravel/:/var/www
+    links:
+      - php
+    networks:
+      - laravelNetwork
+
+networks:
+  laravelNetwork:
+    driver: bridge
