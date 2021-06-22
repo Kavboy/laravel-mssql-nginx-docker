@@ -1,4 +1,4 @@
-# laravel-mssql-docker
+# laravel-mssql-nginx-docker
 
 Repository that provides an example for a Laravel MSSQL Docker project.
 
